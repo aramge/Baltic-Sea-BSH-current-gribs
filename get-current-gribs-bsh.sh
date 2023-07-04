@@ -70,7 +70,7 @@ for REGION in ${@}; do
 		CuxBru)		MAINREGION="Elbe" ;;
 		BruPag)		MAINREGION="Elbe" ;;
 		PagHam)		MAINREGION="Elbe" ;;
-		*)			echo "Don't know what to do with \"${REGION}\"" && exit 2 ;;
+		*)			echo "Don't know what to do with \"${REGION}\"" && exit 3 ;;
 	esac
 	LOCALNAME=${TMPDIR}$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
 		awk '{ print $9 }' | \
