@@ -9,7 +9,7 @@ $0 wb kb
 
 where the arguments are:
 
-ba'  Baltic Sea including Kattegat and parts of Skagerrak                  ca.   2MB in grib2-format
+'ba'  Baltic Sea including Kattegat and parts of Skagerrak                  ca.   2MB in grib2-format
 'wb'  Western Baltic including Belts and Sound extending east to Bornholm   ca.   5MB in grib2-format
 'kbu' Kiel Bight                     ca. 9.8∞-11.3∞E   53.9∞-54.75∞N        ca. 0.4MB in grib2-format
 'mbu' Lübeck Bight                   ca. 10.75∞-12.5∞E 53.9∞-54.75∞N        ca. 0.3MB in grib2-format
