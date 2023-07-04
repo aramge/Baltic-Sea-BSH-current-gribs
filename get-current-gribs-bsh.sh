@@ -1,6 +1,19 @@
 #!/bin/bash
 
-TARGETDIR="~/.xygrib/grib/"
+if [ -z ${GRIBTARGETDIR+x} ]
+then
+	GRIBTARGETDIR=~/.xygrib/grib/
+	echo "Unless you define environment variable GRIBTARGETDIR, I will use ${GRIBTARGETDIR}"
+	echo "Usage: export GRIBTARGETDIR=foo/bar/ && $0 region [region] [...]"
+	echo "Pay attention to the trailing slash /"
+fi
+
+if [ ! -d ${GRIBTARGETDIR} ]
+then
+	echo No directory ${GRIBTARGETDIR}
+	exit 1
+fi
+
 
 if [ $# -eq 0 ]
 then
@@ -36,7 +49,7 @@ River Elbe:
    'PagHam' Pagensand to Hambug       compressed (bz2) ca. 1MB as grib1, ca. 1MB in grib2-format
 
 EOF
-exit 1
+exit 2
 fi
 
 for REGION in ${@}; do
@@ -59,7 +72,7 @@ for REGION in ${@}; do
 		PagHam)		MAINREGION="Elbe" ;;
 		*)			echo "Don't know what to do with \"${REGION}\"" && exit 2 ;;
 	esac
-	LOCALNAME=${TMPDIR}/$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
+	LOCALNAME=${TMPDIR}$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
 		awk '{ print $9 }' | \
 		grep "_${REGION}_.*00.grb2$" | \
 		sed 's/_00//g')
@@ -70,5 +83,6 @@ for REGION in ${@}; do
 			grep "_${REGION}_.*grb2$"); do
 		curl ${BASEURL}${i} >> ${LOCALNAME}
 	done
-	mv ${LOCALNAME} ~/.xygrib/grib/
+	mv ${LOCALNAME} ${GRIBTARGETDIR}
 done
+
