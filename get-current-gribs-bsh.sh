@@ -24,9 +24,14 @@ BASEURL='ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/Ostsee/'
 mkdir gribs
 
 for REGION in ${@}; do
-	LOCALNAME=gribs/$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/Ostsee/ | awk '{ print $9 }' | grep "_${REGION}_.*00.grb2$" | sed 's/_00//g')
+	LOCALNAME=gribs/$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/Ostsee/ | \
+		awk '{ print $9 }' | \
+		grep "_${REGION}_.*00.grb2$" | \
+		sed 's/_00//g')
 	touch ${LOCALNAME}
-	for i in $(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/Ostsee/ | awk '{ print $9 }' | grep "_${REGION}_.*grb2$"); do
+	for i in $(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/Ostsee/ | \
+			awk '{ print $9 }' | \
+			grep "_${REGION}_.*grb2$"); do
 		curl ${BASEURL}${i} >> ${LOCALNAME}
 	done
 	mv ${LOCALNAME} ~/.xygrib/grib/
