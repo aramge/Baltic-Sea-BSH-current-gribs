@@ -7,5 +7,6 @@ Look into the script for usage instructions.
 
 Copyright © 2023 Axel Ramge
 This script is licensed under GPL-3.0-only
+Parts of the usage instruction: Copyright © 2023 Bundesamt für Seeschifffahrt und Hydrographie (BSH)
 
 
