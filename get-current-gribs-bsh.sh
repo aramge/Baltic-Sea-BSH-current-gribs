@@ -1,23 +1,6 @@
 #!/bin/bash
 
-if [ -z ${GRIBTARGETDIR+x} ]
-then
-	GRIBTARGETDIR=~/.xygrib/grib/
-	echo "Unless you define environment variable GRIBTARGETDIR, I will use ${GRIBTARGETDIR}"
-	echo "Usage: export GRIBTARGETDIR=foo/bar/ && $0 region [region] [...]"
-	echo "Pay attention to the trailing slash /"
-fi
-
-if [ ! -d ${GRIBTARGETDIR} ]
-then
-	echo No directory ${GRIBTARGETDIR}
-	exit 1
-fi
-
-
-if [ $# -eq 0 ]
-then
-cat << EOF
+read -r -d '' USAGE <<'EOF'
 usage: $0 region [region] [...]
 
 where 'region' is as follows:
@@ -49,6 +32,25 @@ River Elbe:
    'PagHam' Pagensand to Hambug       compressed (bz2) ca. 1MB as grib1, ca. 1MB in grib2-format
 
 EOF
+
+if [ -z ${GRIBTARGETDIR+x} ]
+then
+	GRIBTARGETDIR=~/.xygrib/grib/
+	echo "Unless you define environment variable GRIBTARGETDIR, I will use ${GRIBTARGETDIR}"
+	echo "Usage: export GRIBTARGETDIR=foo/bar/ && $0 region [region] [...]"
+	echo "Pay attention to the trailing slash /"
+fi
+
+if [ ! -d ${GRIBTARGETDIR} ]
+then
+	echo No directory ${GRIBTARGETDIR}
+	exit 1
+fi
+
+if [ $# -eq 0 ]
+then
+echo Missing argument
+echo "${USAGE}"
 exit 2
 fi
 
@@ -70,7 +72,7 @@ for REGION in ${@}; do
 		CuxBru)		MAINREGION="Elbe" ;;
 		BruPag)		MAINREGION="Elbe" ;;
 		PagHam)		MAINREGION="Elbe" ;;
-		*)			echo "Don't know what to do with \"${REGION}\"" && exit 3 ;;
+		*)			echo "Don't know what to do with \"${REGION}\"" && echo "${USAGE}" && exit 3 ;;
 	esac
 	LOCALNAME=${GRIBTARGETDIR}$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
 		awk '{ print $9 }' | \
