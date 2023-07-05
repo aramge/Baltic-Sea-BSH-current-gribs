@@ -119,3 +119,5 @@ Störungen.
 
 Bei Problemen wenden Sie sich bitte an: opmod(at-Zeichen)bsh.de
 10. Maerz 2021
+
+Copyright © 2023 Bundesamt für Seeschifffahrt und Hydrographie (BSH)

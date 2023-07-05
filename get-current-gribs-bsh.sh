@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright © 2023 Axel Ramge
+# This script is licensed under GPL-3.0-only
+# Parts of the usage instruction: Copyright © 2023 Bundesamt für Seeschifffahrt und Hydrographie (BSH)
+
+
 read -r -d '' USAGE <<'EOF'
 usage: $0 region [region] [...]
 
