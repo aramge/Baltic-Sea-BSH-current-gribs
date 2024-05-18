@@ -85,7 +85,7 @@ for REGION in "${@}"; do
 		sed 's/_00//g')
 	touch "${LOCALNAME}"
 	BASEURL="ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/"
-	for i in "$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}"/ | \
+	for i in "$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION})"/ | \
 			awk '{ print $9 }' | \
 			grep "_${REGION}_.*grb2$"); do
 		curl "${BASEURL}${i}" >> "${LOCALNAME}"
