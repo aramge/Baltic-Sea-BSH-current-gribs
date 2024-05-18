@@ -46,9 +46,9 @@ then
 	echo "Pay attention to the trailing slash /"
 fi
 
-if [ ! -d ${GRIBTARGETDIR} ]
+if [ ! -d "${GRIBTARGETDIR}" ]
 then
-	echo No directory ${GRIBTARGETDIR}
+	echo No directory "${GRIBTARGETDIR}"
 	exit 1
 fi
 
@@ -59,7 +59,7 @@ echo "${USAGE}"
 exit 2
 fi
 
-for REGION in ${@}; do
+for REGION in "${@}"; do
 	case $REGION in
 		no)			MAINREGION="Nordsee" ;;
 		db)			MAINREGION="Nordsee" ;;
@@ -79,16 +79,16 @@ for REGION in ${@}; do
 		PagHam)		MAINREGION="Elbe" ;;
 		*)			echo "Don't know what to do with \"${REGION}\"" && echo "${USAGE}" && exit 3 ;;
 	esac
-	LOCALNAME=${GRIBTARGETDIR}$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
+	LOCALNAME="${GRIBTARGETDIR}"$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/"${MAINREGION}"/ | \
 		awk '{ print $9 }' | \
 		grep "_${REGION}_.*00.grb2$" | \
 		sed 's/_00//g')
-	touch ${LOCALNAME}
+	touch "${LOCALNAME}"
 	BASEURL="ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/"
-	for i in $(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
+	for i in "$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}"/ | \
 			awk '{ print $9 }' | \
 			grep "_${REGION}_.*grb2$"); do
-		curl ${BASEURL}${i} >> ${LOCALNAME}
+		curl "${BASEURL}${i}" >> "${LOCALNAME}"
 	done
 done
 
