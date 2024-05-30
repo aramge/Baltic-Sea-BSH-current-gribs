@@ -4,7 +4,6 @@
 # This script is licensed under GPL-3.0-only
 # Parts of the usage instruction: Copyright © 2023 Bundesamt für Seeschifffahrt und Hydrographie (BSH)
 
-
 read -r -d '' USAGE <<'EOF'
 usage: $0 region [region] [...]
 
@@ -40,55 +39,59 @@ EOF
 
 if [ -z ${GRIBTARGETDIR+x} ]
 then
-	GRIBTARGETDIR=~/.xygrib/grib/
-	echo "Unless you define environment variable GRIBTARGETDIR, I will use ${GRIBTARGETDIR}"
-	echo "Usage: export GRIBTARGETDIR=foo/bar/ && $0 region [region] [...]"
-	echo "Pay attention to the trailing slash /"
+  GRIBTARGETDIR=~/.xygrib/grib/
+  echo "Unless you define environment variable GRIBTARGETDIR, I will use ${GRIBTARGETDIR}"
+  echo "Usage: export GRIBTARGETDIR=foo/bar/ && $0 region [region] [...]"
+  echo "Pay attention to the trailing slash /"
 fi
 
 if [ ! -d "${GRIBTARGETDIR}" ]
 then
-	echo No directory "${GRIBTARGETDIR}"
-	exit 1
+  echo No directory "${GRIBTARGETDIR}"
+  exit 1
 fi
 
 if [ $# -eq 0 ]
 then
-echo Missing argument
-echo "${USAGE}"
-exit 2
+  echo Missing argument
+  echo "${USAGE}"
+  exit 2
 fi
 
 for REGION in "${@}"; do
-	case $REGION in
-		no)			MAINREGION="Nordsee" ;;
-		db)			MAINREGION="Nordsee" ;;
-		idb)		MAINREGION="Nordsee" ;;
-		nfi)		MAINREGION="Nordsee" ;;
-		ofi)		MAINREGION="Nordsee" ;;
-		ba)			MAINREGION="Ostsee" ;;
-		wb)			MAINREGION="Ostsee" ;;
-		kbu)		MAINREGION="Ostsee" ;;
-		mbu)		MAINREGION="Ostsee" ;;
-		rgn)		MAINREGION="Ostsee" ;;
-		snd)		MAINREGION="Ostsee" ;;
-		blt)		MAINREGION="Ostsee" ;;
-		AusAlt)		MAINREGION="Elbe" ;;
-		CuxBru)		MAINREGION="Elbe" ;;
-		BruPag)		MAINREGION="Elbe" ;;
-		PagHam)		MAINREGION="Elbe" ;;
-		*)			echo "Don't know what to do with \"${REGION}\"" && echo "${USAGE}" && exit 3 ;;
-	esac
-	LOCALNAME="${GRIBTARGETDIR}"$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/"${MAINREGION}"/ | \
-		awk '{ print $9 }' | \
-		grep "_${REGION}_.*00.grb2$" | \
-		sed 's/_00//g')
-	touch "${LOCALNAME}"
-	BASEURL="ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/"
-	for i in "$(curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION})"/ | \
-			awk '{ print $9 }' | \
-			grep "_${REGION}_.*grb2$"); do
-		curl "${BASEURL}${i}" >> "${LOCALNAME}"
-	done
+  case $REGION in
+    no)     MAINREGION="Nordsee" ;;
+    db)     MAINREGION="Nordsee" ;;
+    idb)    MAINREGION="Nordsee" ;;
+    nfi)    MAINREGION="Nordsee" ;;
+    ofi)    MAINREGION="Nordsee" ;;
+    ba)     MAINREGION="Ostsee" ;;
+    wb)     MAINREGION="Ostsee" ;;
+    kbu)    MAINREGION="Ostsee" ;;
+    mbu)    MAINREGION="Ostsee" ;;
+    rgn)    MAINREGION="Ostsee" ;;
+    snd)    MAINREGION="Ostsee" ;;
+    blt)    MAINREGION="Ostsee" ;;
+    AusAlt) MAINREGION="Elbe" ;;
+    CuxBru) MAINREGION="Elbe" ;;
+    BruPag) MAINREGION="Elbe" ;;
+    PagHam) MAINREGION="Elbe" ;;
+    *)      echo "Don't know what to do with \"${REGION}\"" && echo "${USAGE}" && exit 3 ;;
+  esac
+  LOCALNAME="${GRIBTARGETDIR}"$(\
+				curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
+				awk '{ print $9 }' | \
+				grep "_${REGION}_.*00.grb2$" | \
+				sed 's/_00//g')
+  touch "${LOCALNAME}"
+  BASEURL="ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/"
+  for i in $(\
+	     curl ftp://ftp.bsh.de:/Stroemungsvorhersagen/grib2/${MAINREGION}/ | \
+	     awk '{ print $9 }' | \
+	     grep "_${REGION}_.*grb2$" \
+	    );
+  do
+    curl "${BASEURL}${i}" >> "${LOCALNAME}"
+  done
 done
 
